@@ -1,6 +1,90 @@
-<label>{{labelPai}}</label>
+<button (click)="buscarPosts()">Buscar Posts</button>
+<button (click)="salvarPost()">Salvar Post</button>
+
+<hr>
+
+<label>Salário de Programador: {{ salario | currency:'BRL':'code':'1.4-4':'br' }}</label>
+
+<div *ngIf="mostrarLinhaCodigo">
+  <br/>
+  <br/>
+  <table>
+    <thead>
+      <tr>
+        <td>Index</td>
+        <td>Número da linha</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let numLinha of linhasDeCodigo; let i = index" >
+        <td>{{ i }}</td>
+        <td>{{ numLinha }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <hr>
 <component-1
-  [label]="labelPai"
-  (clickSalvar)="printBotao($event)"
+  label="Nome"
+  (clickSalvar)="atualizarBotaoClicado($event)"
 ></component-1>
+
+<hr>
+
+<div [ngSwitch]="ultimoBotaoClicado">
+  <div *ngSwitchCase="1">
+    O último botão clicado foi "Salvar 1"
+  </div>
+  <div *ngSwitchCase="2">
+    O último botão clicado foi "Salvar 2"
+  </div>
+  <div *ngSwitchDefault>
+    Nenhum botão foi clicado
+  </div>
+</div>
+
+<hr>
+
+<form (submit)="onSubmit()" [formGroup]="formulario" novalidate>
+  <label>Nome <span style="color:red;">*</span></label>
+  <br/>
+  <input formControlName="nome" type="text">
+  <label *ngIf="!formulario.get('nome').pristine 
+    && formulario.get('nome').invalid">
+    <span style="color: red;">O campo "Nome" é obrigatório</span>
+  </label>
+  <br/>
+  <br/>
+  <label>Idade</label>
+  <br/>
+  <input formControlName="idade" type="number">
+  <br/>
+  <br/>
+  <div formGroupName="endereco">
+    <label>Rua <span style="color: red;">*</span></label>
+    <br/>
+    <input formControlName="rua" type="text">
+    <label *ngIf="!formulario.get('endereco.rua').pristine 
+      && formulario.get('endereco.rua').invalid">
+      <span style="color: red;">O campo "Rua" é obrigatório</span>
+    </label>
+    <br/>
+    <br/>
+    <label>Número</label>
+    <br/>
+    <input formControlName="numero" type="number">
+    <br/>
+    <br/>
+  </div>
+  <label>Permissões</label>
+  <br/>
+  <select style="width: 100px" formControlName="permissoes" multiple>
+    <option *ngFor="let permissao of permissoes" [value]="permissao">{{ permissao }}</option>
+  </select>
+  <br/>
+  <br/>
+  <button >Salvar</button>
+</form>
+
+<notifications></notifications>
